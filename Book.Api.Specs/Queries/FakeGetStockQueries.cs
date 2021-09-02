@@ -11,11 +11,11 @@ namespace Book.Api.Specs.Queries
         }
     }
     
-    // public class FooBarQuery : IGetStockQuery
-    // {
-    //     public Task<int> Execute(string isbn)
-    //     {
-    //         return Task.FromResult<int>(100);
-    //     }
-    // }
+    public class FakeGetStockQuery : IGetStockQuery
+    {
+        public Task<int> Execute(string isbn)
+        {
+            return Task.FromResult<int>(100);
+        }
+    }
 }

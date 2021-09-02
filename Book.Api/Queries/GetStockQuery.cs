@@ -15,12 +15,4 @@ namespace Book.Api.Queries
             throw new NotImplementedException();
         }
     }
-    
-    public class FooBarQuery : IGetStockQuery
-    {
-        public Task<int> Execute(string isbn)
-        {
-            return Task.FromResult<int>(100);
-        }
-    }
 }

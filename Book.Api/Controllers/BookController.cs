@@ -27,22 +27,7 @@ namespace Book.Api.Controllers
         [HttpPut]
         public async Task<IActionResult> Reservation(BookReservationRequest request)
         {
-            var errors = new List<ApiError>();
-            
-            if (string.IsNullOrEmpty(request.ISBN))
-            {
-                errors.Add(new ApiError { ErrorCode = "InvalidISBN" });
-            }
-            
-            if (string.IsNullOrEmpty(request.MembershipNumber))
-            {
-                errors.Add(new ApiError { ErrorCode = "InvalidMemberNo" });
-            }
-
-            if (await _getStockQuery.Execute(request.ISBN) <= 0)
-            {
-                errors.Add(new ApiError { ErrorCode = "InsufficientStock" });
-            }
+            var errors = await Validate(request);
 
             if (errors.Any())
             {
@@ -50,6 +35,28 @@ namespace Book.Api.Controllers
             }
             
             return new CreatedResult("http://foo.com/", request);
+        }
+
+        private async Task<List<ApiError>> Validate(BookReservationRequest request)
+        {
+            var errors = new List<ApiError>();
+
+            if (string.IsNullOrEmpty(request.ISBN))
+            {
+                errors.Add(new ApiError {ErrorCode = "InvalidISBN"});
+            }
+
+            if (string.IsNullOrEmpty(request.MembershipNumber))
+            {
+                errors.Add(new ApiError {ErrorCode = "InvalidMemberNo"});
+            }
+
+            if (await _getStockQuery.Execute(request.ISBN) <= 0)
+            {
+                errors.Add(new ApiError {ErrorCode = "InsufficientStock"});
+            }
+
+            return errors;
         }
     }
 }
